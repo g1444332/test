@@ -1,5 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QRadioButton, QHBoxLayout, QMessageBox
+from PyQt5.QtGui import QFont
 
 
 def show_win():
@@ -21,7 +22,7 @@ main_win.setWindowTitle("Конкурс від Crazy People")
 main_win.setStyleSheet("background-color: rgb(173, 216, 230);")
 
 question = QLabel('В якому році канал отримав "золоту кнопку" від YouTube?')
-question.setStyleSheet("font-size: 2em;")
+question.setFont(QFont("Times", 8, QFont.Bold))
 btn_answer1 = QRadioButton('2005')
 btn_answer2 = QRadioButton('2010')
 btn_answer3 = QRadioButton('2015')
