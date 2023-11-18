@@ -9,6 +9,7 @@ main_win.setWindowTitle("Memory Card")
 
 btn_menu = QPushButton("Menu")
 btn_rest = QPushButton("Відпочити")
+btn_next = QPushButton("Відповісти")
 sb_rest = QSpinBox()
 sb_rest.setValue(30)
 
@@ -24,6 +25,9 @@ qb_Group.addButton(q_rb_3)
 qb_Group.addButton(q_rb_4)
 
 question_group = QGroupBox("Варіанти відповідей")
+
+
+gb_answer = QGroupBox()
 
 
 lb_rest = QLabel("Хвилини")
@@ -44,11 +48,17 @@ lineH_1.addWidget(sb_rest)
 lineH_1.addWidget(lb_rest)
 
 lineH_2 = QHBoxLayout()
-lineH_2.addWidget(lb_question)
+lineH_2.addWidget(lb_question, alignment= Qt.AlignCenter)
 
 lineH_3 = QHBoxLayout()
 lineH_3.addLayout(lineV_1)
 lineH_3.addLayout(lineV_2)
+
+h4_main = QHBoxLayout()
+h4_main.addStretch(1)
+h4_main.addWidget(btn_next, stretch=2)
+h4_main.addStretch(1)
+
 
 
 
@@ -57,7 +67,9 @@ question_group.setLayout(lineH_3)
 lineV_main = QVBoxLayout()
 lineV_main.addLayout(lineH_1)
 lineV_main.addLayout(lineH_2)
+
 lineV_main.addWidget(question_group)
+lineV_main.addLayout(h4_main)
 
 main_win.setLayout(lineV_main)
 
