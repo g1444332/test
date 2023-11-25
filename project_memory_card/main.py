@@ -119,7 +119,7 @@ def count_stats():
     for question in question_list:
         attempts_sum += question.get_attempts()
         success_sum += question.get_success()
-    rate = success_sum/attempts_sum
+    rate = success_sum/attempts_sum*100
     text = f'Разів відповіли: {attempts_sum}\n' \
     f'Вірних відповідей: {success_sum}\n' \
     f'Успішність: {round(rate)}%'
