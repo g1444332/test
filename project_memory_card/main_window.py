@@ -1,82 +1,78 @@
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGroupBox,\
+    QButtonGroup, QRadioButton, QPushButton, QLabel, QSpinBox
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QRadioButton, QHBoxLayout, QMessageBox, QPushButton, QSpinBox, QButtonGroup, QGroupBox
-from PyQt5.QtGui import QFont
 
-main_win = QWidget()
-main_win.resize(600, 500)
-main_win.move(300, 300)
-main_win.setWindowTitle("Memory Card")
+window = QWidget()
 
-btn_menu = QPushButton("Menu")
-btn_rest = QPushButton("Відпочити")
-btn_next = QPushButton("Відповісти")
-sb_rest = QSpinBox()
-sb_rest.setValue(30)
+btn_menu = QPushButton('Меню')
+btn_rest = QPushButton('Відпочити')
+btn_next = QPushButton('Відповісти')
 
-q_rb_1 = QRadioButton("1")
-q_rb_2 = QRadioButton("2")
-q_rb_3 = QRadioButton("3")
-q_rb_4 = QRadioButton("4")
+rb_ans1 = QRadioButton("1")
+rb_ans2 = QRadioButton("2")
+rb_ans3 = QRadioButton("3")
+rb_ans4 = QRadioButton("4")
 
-qb_Group = QButtonGroup()
-qb_Group.addButton(q_rb_1)
-qb_Group.addButton(q_rb_2)
-qb_Group.addButton(q_rb_3)
-qb_Group.addButton(q_rb_4)
+RadioGroup = QButtonGroup()
+RadioGroup.addButton(rb_ans1)
+RadioGroup.addButton(rb_ans2)
+RadioGroup.addButton(rb_ans3)
+RadioGroup.addButton(rb_ans4)
 
-question_group = QGroupBox("Варіанти відповідей")
+lb_question = QLabel('Запитання')
+lb_rest = QLabel('хвилин')
+lb_result = QLabel('Правильно')
+lb_right_answer = QLabel('відповідь')
 
+sp_rest = QSpinBox()
+gb_question = QGroupBox('Варіанти відповідей')
+
+rb_v1 = QVBoxLayout()
+rb_v2 = QVBoxLayout()
+rb_h1 = QHBoxLayout()
+
+rb_v1.addWidget(rb_ans1)
+rb_v1.addWidget(rb_ans2)
+rb_v2.addWidget(rb_ans3)
+rb_v2.addWidget(rb_ans4)
+
+rb_h1.addLayout(rb_v1)
+rb_h1.addLayout(rb_v2)
+
+gb_question.setLayout(rb_h1)
 
 gb_answer = QGroupBox()
 
+v1 = QVBoxLayout()
+v1.addWidget(lb_result)
+v1.addWidget(lb_right_answer)
+gb_answer.setLayout(v1)
 
-lb_rest = QLabel("Хвилини")
-lb_question = QLabel('Питання')
-
-lineV_1 = QVBoxLayout()
-lineV_1.addWidget(q_rb_1)
-lineV_1.addWidget(q_rb_3)
-
-lineV_2 = QVBoxLayout()
-lineV_2.addWidget(q_rb_2)
-lineV_2.addWidget(q_rb_4)
-
-lineH_1 = QHBoxLayout()
-lineH_1.addWidget(btn_menu)
-lineH_1.addWidget(btn_rest)
-lineH_1.addWidget(sb_rest)
-lineH_1.addWidget(lb_rest)
-
-lineH_2 = QHBoxLayout()
-lineH_2.addWidget(lb_question, alignment= Qt.AlignCenter)
-
-lineH_3 = QHBoxLayout()
-lineH_3.addLayout(lineV_1)
-lineH_3.addLayout(lineV_2)
-
+h1_main = QHBoxLayout()
+h2_main = QHBoxLayout()
+h3_main = QHBoxLayout()
 h4_main = QHBoxLayout()
+v1_main = QVBoxLayout()
+
+h1_main.addWidget(btn_menu)
+h1_main.addStretch(1)
+h1_main.addWidget(btn_rest)
+h1_main.addWidget(sp_rest)
+h1_main.addWidget(lb_rest)
+
+h2_main.addWidget(lb_question, alignment=(Qt.AlignHCenter | Qt.AlignVCenter))
+h3_main.addWidget(gb_answer)
+h3_main.addWidget(gb_question)
+gb_answer.hide()
+
 h4_main.addStretch(1)
 h4_main.addWidget(btn_next, stretch=2)
 h4_main.addStretch(1)
 
-
-
-
-question_group.setLayout(lineH_3)
-
-lineV_main = QVBoxLayout()
-lineV_main.addLayout(lineH_1)
-lineV_main.addLayout(lineH_2)
-
-lineV_main.addWidget(question_group)
-lineV_main.addLayout(h4_main)
-
-main_win.setLayout(lineV_main)
-
-
-
-
-
-
-
-
+v1_main.addLayout(h1_main, stretch=1)
+v1_main.addLayout(h2_main, stretch=2)
+v1_main.addLayout(h3_main, stretch=8)
+v1_main.addLayout(h4_main)
+v1_main.setSpacing(5)
+window.setLayout(v1_main)
+window.resize(550, 450)

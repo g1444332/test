@@ -1,85 +1,136 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QRadioButton, QHBoxLayout, QMessageBox
-from random import shuffle, choice as chc
-from time import *
+from PyQt5.QtWidgets import QApplication
+from random import choice, shuffle
+from time import sleep
+a = QApplication([])
 
-
-app = QApplication([])
 from main_window import *
+from menu_window import *
 
 
 class Question():
-    def __init__(self, text, answer, ans2, ans3, ans4):
+    def __init__(self,text, right_answer, ans2,ans3, ans4):
         self.text = text
-        self.answer = answer
-        self.ans2 = ans2
+        self.right_answer = right_answer
+        self.ans2= ans2
         self.ans3 = ans3
         self.ans4 = ans4
         self.attempts = 0
         self.success = 0
-    def getText(self):
+    def get_text(self):
         return self.text
-    def gotAnswer(self):
+    def got_right(self):
         self.attempts += 1
         self.success += 1
-    def gotWrong(self):
-        self.attempts += 1
+    def got_wrong(self):
+        self.attempts +=1
+    def get_attempts(self):
+        return self.attempts
+    def get_success(self):
+        return self.success
 
-question1 = Question("Яблуко", "apple", "application", "pineapple", "apply")
-question2 = Question("Дім", "house", "horse", "hurry", "hour")
-question3 = Question("Миша", "mouse", "mouth", "muse", "museum")
-question4 = Question("Число", "number", "digit", "amount", "summary")
 
-radio_list = [q_rb_1, q_rb_2, q_rb_3, q_rb_4]
-question_list = [question1, question2, question3, question4]
+question1 = Question('Яблуко', 'apple', 'application', 'pinapple', 'apply')
+question2 = Question('Дім', 'house', 'horse', 'hurry', 'hour')
+question3 = Question('Миша', 'mouse', 'mouth', 'muse', 'museum')
+question4 = Question('Число', 'number', 'digit', 'amount', 'summary')
 
-def newQuestion():
-    global currentQuestion
 
-    currentQuestion = chc(question_list)
-    lb_question.setText(currentQuestion.getText())
+radio_list = [rb_ans1, rb_ans2, rb_ans3, rb_ans4]
+question_list = [question1, question2,question3, question4]
 
+def new_question():
+    global current_question
+    current_question = choice(question_list)
+    lb_question.setText(current_question.get_text())
+    lb_right_answer.setText(current_question.right_answer)
     shuffle(radio_list)
+    radio_list[0].setText(current_question.right_answer)
+    radio_list[1].setText(current_question.ans2)
+    radio_list[2].setText(current_question.ans3)
+    radio_list[3].setText(current_question.ans4)
 
-    radio_list[0].setText(currentQuestion.answer)
-    radio_list[1].setText(currentQuestion.ans2)
-    radio_list[2].setText(currentQuestion.ans3)
-    radio_list[3].setText(currentQuestion.ans4)
+new_question()
 
 def check_result():
+    RadioGroup.setExclusive(False)
     for answer in radio_list:
-        correct = answer.isChecked()
-        if correct:
-            if answer.text() == currentQuestion.text:
-                lb_question.setText('Правильно')
-        else:
-            lb_question.setText("Неправльно")
+        if answer.isChecked():
+            if answer.text() == lb_right_answer.text():     
+                lb_result.setText('Правильно')
+                current_question.got_right()
+            else:
+                lb_result.setText('Неправильно')
+                current_question.got_wrong()
+            answer.setChecked(False)
 
 def switch_screen():
     if btn_next.text() == 'Відповісти':
         check_result()
-        question_group.hide()
+        gb_question.hide()
         gb_answer.show()
 
-        btn_next.setText("Наступне питання")
+        btn_next.setText('Наступне запитання')
     else:
-        newQuestion()
-        question_group.hide()
-        gb_answer.show()
+        new_question()
+        gb_question.show()
+        gb_answer.hide()
 
-        btn_next.setText("Відповісти")
-
+        btn_next.setText('Відповісти')
 
 def rest():
-    main_win.hide()
-    sleep(sb_rest.value() * 60)
-    main_win.show()
+    window.hide()
+    sleep(sp_rest.value()*60)
+    window.show()
+
+def switch_windown_to_menu():
+    window.show()
+    menuWindow.hide()
+
+def switch_menu_to_window():
+    count_stats()
+    window.hide()
+    menuWindow.show()
 
 
-newQuestion()
+def create_question():
+    if len(qle_question.text()) > 2:
+        question_text = qle_question.text()
+        if len(qle_answer.text()) > 2:
+            question_answer = qle_answer.text()
+            if len(qle_wrong1.text()) > 2:
+                question_wrong1 = qle_wrong1.text()
+                if len(qle_wrong2.text()) > 2:
+                    question_wrong2 = qle_wrong2.text()
+                    if len(qle_wrong3.text()) > 2:
+                        question_wrong3 = qle_wrong3.text()
+                        question = Question(question_text, question_answer, question_wrong1, question_wrong2, question_wrong3)
+                        question_list.append(question)
+
+def clear_question():
+    qle_question.clear()
+    qle_answer.clear()
+    qle_wrong1.clear()
+    qle_wrong2.clear()
+    qle_wrong3.clear()
+
+def count_stats():
+    attempts_sum = 0
+    success_sum = 0
+    for question in question_list:
+        attempts_sum += question.get_attempts()
+        success_sum += question.get_success()
+    rate = success_sum/attempts_sum
+    text = f'Разів відповіли: {attempts_sum}\n' \
+    f'Вірних відповідей: {success_sum}\n' \
+    f'Успішність: {round(rate)}%'
+    lb_stat.setText(text)
+
 
 btn_rest.clicked.connect(rest)
 btn_next.clicked.connect(switch_screen)
-
-main_win.show()
-app.exec_()
-
+btn_menu.clicked.connect(switch_menu_to_window)
+btn_back.clicked.connect(switch_windown_to_menu)
+btn_add_question.clicked.connect(create_question)
+btn_clear_question.clicked.connect(clear_question)
+window.show()
+a.exec_()
